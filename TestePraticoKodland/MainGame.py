@@ -195,10 +195,6 @@ class Player:
         if self.life_state == 1:
             if self.actor.y > WIDTH + self.actor.height:
                 self.defeat_player()
-            if keyboard.LSHIFT:
-                walk_speed = 8
-            else:
-                walk_speed = 6
             if keyboard.D:
                 animation.animator_state = 1
                 self.actor.x = self.actor.x + self.walk_speed
