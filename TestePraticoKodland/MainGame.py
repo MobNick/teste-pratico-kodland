@@ -548,7 +548,7 @@ def start_game():
     player.life_state = 1
     player.actor.pos = (starting_position[0],starting_position[1])
     if sound_active:
-        sounds.bg_music.set_volume(0.1)
+        sounds.bg_music.set_volume(0.2)
         death_menu.sound_button.text = 'Som: ON'
     else:
         sounds.bg_music.set_volume(0)
@@ -616,7 +616,7 @@ def toggle_sounds():
         sounds.stomp_enemy.set_volume(0)
     else:
         sound_active = True
-        sounds.bg_music.set_volume(0.1)
+        sounds.bg_music.set_volume(0.2)
         sounds.defeat.set_volume(0.3)
         sounds.jump.set_volume(1)
         sounds.stomp_enemy.set_volume(1)
