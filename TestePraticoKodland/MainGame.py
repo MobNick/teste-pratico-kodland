@@ -27,7 +27,7 @@ class MainMenu:
         self.play_button = Button('Jogar',WIDTH/2,(HEIGHT/2) - self.button_spacing + self.buttons_offset)
         self.sound_button = Button('Som: ON', WIDTH / 2, (HEIGHT / 2) + self.buttons_offset)
         self.quit_button = Button('Sair', WIDTH / 2, (HEIGHT / 2) + self.button_spacing + self.buttons_offset)
-        self.instructions = 'A e D para se mover\nBarra de Espaço para pular, segure para pular mais alto\nPule na cabeça dos inimigos para derrotá-los'
+        self.instructions = 'A e D para se mover\nBarra de Espaço para pular, segure para pular mais alto\nPule na cabeça dos inimigos para derrotá-los\nInimigos terrestres dão 1 ponto, inimigos aéreos dão 2'
 
         global sound_active
 
@@ -341,7 +341,6 @@ class Enemy:
         self.animator_state = 0
     def update(self):
         self.actor.velocity_x = self.actor.x - self.previous_x
-        print(self.actor.velocity_x)
         self.previous_x = self.actor.x
         self.frame_index += 0.2
         if self.animator_state == 0:
@@ -371,6 +370,8 @@ class Enemy:
                 else:
                     player.defeat_player()
         for block in level.solid_blocks:
+            if block.midright[0] > self.actor.x > block.midleft[0] and block.midtop[1] < self.actor.y < block.midbottom[1]:
+                self.actor.y = block.y - self.actor.height
             if self.actor.colliderect(block):
                 if self.actor.velocity_y >= 1:
                     self.actor.velocity_y = 0
@@ -385,7 +386,7 @@ class Enemy:
                     self.grounded = False
                 break
             self.grounded = False
-        if self.actor.y >= 500 and (self.actor.x <= 0 or self.actor.x > WIDTH):
+        if self.actor.x <= 0 or self.actor.x > WIDTH:
             self.grounded = True
         if not self.grounded:
             self.actor.velocity_y += self.gravity
@@ -401,6 +402,14 @@ class Enemy:
                 self.animator_state = 1
         if self.actor.velocity_y > 5 or self.actor.velocity_y < -5:
             self.animator_state = 2
+        for enemy in enemies_in_level:
+            if self.actor.colliderect(enemy.actor):
+                if enemy != self:
+                    if enemy.actor.x + 2 > self.actor.x > enemy.actor.x - 2:
+                        if random.randint(1,2) == 1:
+                            self.actor.x = self.actor.x - self.actor.width/2
+                        else:
+                            self.actor.x = self.actor.x + self.actor.width / 2
 
 
     def try_go_right(self):
