@@ -386,6 +386,14 @@ class Enemy:
                     self.grounded = False
                 break
             self.grounded = False
+        for enemy in enemies_in_level:
+            if self.actor.colliderect(enemy.actor):
+                if enemy != self and type(enemy) == Enemy:
+                    if enemy.actor.x + 2 > self.actor.x > enemy.actor.x - 2:
+                        if random.randint(1,2) == 1:
+                            self.actor.x = self.actor.x - self.actor.width/2
+                        else:
+                            self.actor.x = self.actor.x + self.actor.width / 2
         if self.actor.x <= 0 or self.actor.x > WIDTH:
             self.grounded = True
         if not self.grounded:
@@ -402,21 +410,13 @@ class Enemy:
                 self.animator_state = 1
         if self.actor.velocity_y > 5 or self.actor.velocity_y < -5:
             self.animator_state = 2
-        for enemy in enemies_in_level:
-            if self.actor.colliderect(enemy.actor):
-                if enemy != self:
-                    if enemy.actor.x + 2 > self.actor.x > enemy.actor.x - 2:
-                        if random.randint(1,2) == 1:
-                            self.actor.x = self.actor.x - self.actor.width/2
-                        else:
-                            self.actor.x = self.actor.x + self.actor.width / 2
 
 
     def try_go_right(self):
         self.actor.x = self.actor.x + self.walk_speed
         for enemy in enemies_in_level:
             if self.actor.colliderect(enemy.actor):
-                if enemy != self:
+                if enemy != self and type(enemy) == Enemy:
                     if enemy.actor.x > self.actor.x or enemy.actor.x == self.actor.x:
                         self.actor.x = (enemy.actor.x - enemy.actor.width / 2 - self.actor.width / 2)
                         break
@@ -433,7 +433,7 @@ class Enemy:
         self.actor.x = self.actor.x - self.walk_speed
         for enemy in enemies_in_level:
             if self.actor.colliderect(enemy.actor):
-                if enemy != self:
+                if enemy != self and type(enemy) == Enemy:
                     if enemy.actor.x < self.actor.x or enemy.actor.x == self.actor.x:
                         self.actor.x = (enemy.actor.x + enemy.actor.width / 2 + self.actor.width / 2)
                         break
